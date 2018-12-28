@@ -1,7 +1,9 @@
 from keras import backend as K
 import numpy as np
+import time
 from utils import *
 from model import *
+from scipy.optimize import fmin_l_bfgs_b
 
 import argparse
 
@@ -64,14 +66,33 @@ def main(args):
     fetch_loss_and_grads = K.function([synthesized_image], [loss, grads])
     evaluator = Evaluator(fetch_loss_and_grads, img_width, img_height=img_height)
 
-    result_prefix = 'style_transfer_result'
+    # result_prefix = 'style_transfer_result'
+
+    x = preprocessing_image(content_image)
+    x = x.flatten()
+    for step in range(steps):
+        start_time = time.time()
+        x, min_val, info = fmin_l_bfgs_b(evaluator.loss,
+                                         x,
+                                         fprime=evaluator.grads,
+                                         maxfun=20)
+        if step % 30 == 0:
+            end_time = time.time()
+            print('Step %d / %d: ' % (step + 1, steps))
+            print('Loss: %d \tprocessing time: %ds' % (min_val, end_time - start_time))
+        if step == steps - 1:
+            img = x.copy().reshape((img_height, img_width, 3))
+            img = deprocess_image(img)
+            plot_images(content_image, style_image, img)
+
+
 
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--content_img', type=str, default='./datasets/content/cat.jpg')
-    parser.add_argument('--style_img', type=str, default='./datasets/style_reference/the_scream.jpg')
+    parser.add_argument('--content_img', type=str, default='cat.jpg')
+    parser.add_argument('--style_img', type=str, default='the_scream.jpg')
     parser.add_argument('--img_height', type=int, default=400,
                         help='the height of synthesized image')
     parser.add_argument('--steps', type=int, default=300)
