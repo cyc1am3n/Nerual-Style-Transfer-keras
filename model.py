@@ -1,7 +1,6 @@
-from keras.aplications import vgg19
+from keras.applications import vgg19
 from keras import backend as K
 from utils import *
-from scipy.optimize import fmin_l_bfgs_b
 
 '''
 FUNCTION OF MATRIX CALCULATION AND LOSSES (CONTENT, STYLE)
