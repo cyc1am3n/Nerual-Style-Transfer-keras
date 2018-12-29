@@ -21,10 +21,10 @@ def style_loss(style, synthesized, size):
     return K.sum(K.square(style - synthesized) / (4. * (channels ** 2) * (size ** 2)))
 
 # Load model (VGG19 with imagenet)
-def load_model(content, style, size):
+def load_model(content, style, height, width):
     target_image = K.constant(preprocessing_image(content))
     style_image = K.constant(preprocessing_image(style))
-    synthesized_image = K.placeholder((1, 400, size, 3))
+    synthesized_image = K.placeholder((1, height, width, 3))
 
     input_tensor = K.concatenate([target_image,
                                   style_image,
@@ -33,7 +33,8 @@ def load_model(content, style, size):
     model = vgg19.VGG19(input_tensor=input_tensor,
                         weights='imagenet',
                         include_top=False)
-    print('Model loaded')
+    print('Model loaded.')
+    print('Image height: %d,\tImage width: %d' % (height, width))
     return model, synthesized_image
 
 
