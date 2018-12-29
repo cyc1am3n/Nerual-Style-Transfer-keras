@@ -12,7 +12,7 @@ FUNCTION OF IMAGE LOADING AND PROCESSING
 def load_images(content_image_path, style_image_path, img_height=400):
     content_image_path = os.path.join('./datasets/content', content_image_path)
     style_image_path = os.path.join('./datasets/style_reference', style_image_path)
-    width, height = load_img(content_image_path).size()
+    width, height = load_img(content_image_path).size
     img_width = int(width * img_height / height)
     content_image = load_img(content_image_path, target_size=(img_height, img_width))
     style_image = load_img(style_image_path, target_size=(img_height, img_width))
