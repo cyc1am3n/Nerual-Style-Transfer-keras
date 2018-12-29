@@ -4,9 +4,16 @@ Keras implementation of the paper [Image style transfer using convolutional neur
 
 **IN PROGRESS...**
 
+## Dependencies
+
+* keras
+* numpy
+* scipy
+* matplotlib
+
 ## Usage
 
-### 1. Install requirements (Not completed)
+### 1. Install requirements
 
 ```bash
 $ pip3 install -r requirements.txt
@@ -37,12 +44,12 @@ Run `train.py` and train a model with images you want to synthesize.
 ```bash
 $ python train.py --content_img='cat.jpg'\
 				  --style_img='the_scream.jpg'\
-				  --img_height=400\
-				  --steps=300\
-				  --c_weight=1e-5\
+				  --img_height=512\
+				  --num_iterations=300\
+				  --c_weight=0.05\
 				  --s_weight=1\
 				  --c_layer=5\
-				  --s_layer=[1,2,3,4,5]\
+				  --s_layer=[1,2,3,4,5]
 ```
 
 ## To do
